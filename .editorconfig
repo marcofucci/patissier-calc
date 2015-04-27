@@ -1,0 +1,6 @@
+# editorconfig.org
+root = true
+
+[*.jsx]
+trim_trailing_whitespace = true
+indent_size = 2
