@@ -3,6 +3,7 @@ node_modules
 npm-debug.log
 
 app/bundle.js
+app/bower_components
 
 build
 _public
