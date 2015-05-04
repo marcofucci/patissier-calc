@@ -8,11 +8,11 @@ var data = [
     name: "Milk",
     quantity: {
       value: 100,
-      measure: 'ml'
+      measure: 'gr'
     },
     unitprice: {
       quantity: {
-        value: 101,
+        value: 1,
         measure: 'kg'
       },
       price: '2.34'

@@ -1,8 +1,6 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-
-
-var MEASURE_VALUES = ['unit', 'ml', 'cl', 'l', 'gr', 'kg'];
+var QuantityUtils = require('../utils/QuantityUtils.jsx');
 
 
 var Quantity = React.createClass({
@@ -26,14 +24,15 @@ var Quantity = React.createClass({
   		return this.props.quantity.measure;
   	}
 
-    var measureOptions = MEASURE_VALUES.map(function (val) {
+    var measureOptions = QuantityUtils.getAllTypes().map(function (val) {
       return (
         <option key={val} value={val}>{val}</option>
       );
     });
 
   	return (
-  		<select value={this.props.quantity.measure || 'kg'} onChange={this.onChange.bind(this, 'measure', null)}>
+  		<select value={this.props.quantity.measure} onChange={this.onChange.bind(this, 'measure', null)}>
+        <option key={-1}>--</option>
         {measureOptions}
       </select>
     )

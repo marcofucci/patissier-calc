@@ -5,6 +5,7 @@ var ReactPropTypes = React.PropTypes;
 var ListingStore = require('../stores/ListingStore.jsx');
 var Quantity = require('./Quantity.jsx');
 var UnitPrice = require('./UnitPrice.jsx');
+var QuantityUtils = require('../utils/QuantityUtils.jsx');
 
 
 var ItemForm = React.createClass({
@@ -41,15 +42,28 @@ var ItemForm = React.createClass({
       return <input className="button warning postfix" type="submit" value="Edit" onClick={this.enterEditMode} />;
     }
 
-    // if (this.state.isNew) {
     return <input className="button postfix" type="submit" value="Save" onClick={this.save} />;
-    // }
+  },
+
+  _purchasePrice: function() {
+    var item = this.state.item;
+    var converted = item.quantity.value * QuantityUtils.convert(
+      item.quantity.measure,
+      item.unitprice.quantity.measure
+    );
+
+    var val = (item.unitprice.price / item.unitprice.quantity.value) * converted;
+    if (isNaN(val)) {
+      return '--';
+    }
+    return val.toFixed(2);
   },
 
   render: function() {
     var item = this.state.item;
     var name = this._name();
     var actionButtons = this._actionButtons();
+    var purchasePrice = this._purchasePrice();
 
     return (
       <div className="row">
@@ -62,7 +76,8 @@ var ItemForm = React.createClass({
 
         <UnitPrice className="large-4 columns padl0" isEditing={this.state.isEditing} onChange={this.onUnitpriceChange} unitprice={item.unitprice} />
 
-        <div className="large-2 columns">{actionButtons}</div>
+        <div className="large-1 columns">{actionButtons}</div>
+        <div className="large-1 columns">{purchasePrice}</div>
       </div>
     );
   },
