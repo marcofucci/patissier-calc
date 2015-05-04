@@ -1,2 +1,15 @@
 @import "../bower_components/foundation/css/normalize.css";
 @import "../bower_components/foundation/css/foundation.css";
+
+
+.row.main {
+	max-width: 82.5rem;
+}
+
+.padl0 {
+	padding-left: 0;
+}
+
+.padr0 {
+	padding-right: 0;
+}

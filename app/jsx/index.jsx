@@ -1,10 +1,10 @@
 /* @jsx React.DOM */
 
 var React = require('react');
-var IngredientBox = require('./components/IngredientBox.jsx');
+var Listing = require('./components/Listing.jsx');
 
 
 React.render(
-	<IngredientBox />,
+	<Listing />,
 	document.getElementById('content')
 );
