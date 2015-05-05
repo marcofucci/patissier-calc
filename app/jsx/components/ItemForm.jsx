@@ -77,7 +77,14 @@ var ItemForm = React.createClass({
         <UnitPrice className="large-4 columns padl0" isEditing={this.state.isEditing} onChange={this.onUnitpriceChange} unitprice={item.unitprice} />
 
         <div className="large-1 columns">{actionButtons}</div>
-        <div className="large-1 columns">{purchasePrice}</div>
+        <div className="large-1 columns">
+          <div className="row collapse">
+            <div className="large-3 columns">
+              <span className="right">{String.fromCharCode(163)}</span>
+            </div>
+            <div className="small-9 columns">{purchasePrice}</div>
+          </div>
+        </div>
       </div>
     );
   },

@@ -26,7 +26,14 @@ var UnitPrice = React.createClass({
 
     return (
       <div className={this.props.className}>
-        <div className="large-5 columns">{price}</div>
+        <div className="large-5 columns">
+          <div className="row collapse">
+            <div className="large-3 columns">
+              <span className="right">{String.fromCharCode(163)}</span>
+            </div>
+            <div className="small-9 columns">{price}</div>
+          </div>
+        </div>
         <Quantity className="large-7 columns" isEditing={this.props.isEditing} onChange={this.onQuantityChange} quantity={this.props.unitprice.quantity} />
       </div>
     );
