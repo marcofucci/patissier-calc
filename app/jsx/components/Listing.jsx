@@ -11,11 +11,23 @@ function getListingItems() {
   return ListingStore.getState().items;
 }
 
+function getTotPurchasePrice() {
+  var items = getListingItems();
+  var totPurchasePrice = 0;
+
+  items.map(function(item) {
+    totPurchasePrice += item.purchasePrice;
+  });
+
+  return totPurchasePrice;
+}
+
 
 var Listing = React.createClass({
 	getInitialState: function() {
     return {
-      data: getListingItems()
+      data: getListingItems(),
+      totPurchasePrice: getTotPurchasePrice()
     };
   },
 
@@ -47,9 +59,24 @@ var Listing = React.createClass({
             </div>
           </div>
 
-          <ItemList onSave={this.onItemSave} items={this.state.data} />
+          <ItemList onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} items={this.state.data} />
 
-          <ItemForm onSave={this.onItemSave} isEditing={true} />
+          <ItemForm onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} isEditing={true} />
+
+          <div className="row">
+            <div className="large-11 columns tar">
+              Purchase price:
+            </div>
+            <div className="large-1 columns">
+              <div className="row collapse">
+                <div className="large-3 columns">
+                  <span className="right">{String.fromCharCode(163)}</span>
+                </div>
+                <div className="small-9 columns">{this.state.totPurchasePrice.toFixed(2)}</div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     );
@@ -59,9 +86,12 @@ var Listing = React.createClass({
     ListingActions.createOrUpdate(item);
   },
 
+  onPurchasePriceChange: function(item) {},
+
   onDataChange: function() {
     this.setState({
-      data: getListingItems()
+      data: getListingItems(),
+      totPurchasePrice: getTotPurchasePrice()
     });
   }
 });

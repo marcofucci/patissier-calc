@@ -16,7 +16,8 @@ var data = [
         measure: 'kg'
       },
       price: '2.34'
-    }
+    },
+    purchasePrice: 0.23
   },
   {
     id: 2,
@@ -31,7 +32,8 @@ var data = [
         measure: 'l'
       },
       price: '1.30'
-    }
+    },
+    purchasePrice: 0.65
   }
 ];
 

@@ -8,16 +8,18 @@ var ItemForm = require('./ItemForm.jsx');
 var ItemList = React.createClass({
   propTypes: {
     onSave: ReactPropTypes.func.isRequired,
-    items: ReactPropTypes.array.isRequired
+    items: ReactPropTypes.array.isRequired,
+    onPurchasePriceChange: ReactPropTypes.func.isRequired
   },
 
   render: function() {
+    var self = this;
     var items = this.props.items;
     var onSaveFunc = this._onSave;
 
   	var itemNodes = items.map(function (item) {
       return (
-        <ItemForm item={item} onSave={onSaveFunc} />
+        <ItemForm item={item} onPurchasePriceChange={self.props.onPurchasePriceChange} onSave={onSaveFunc} />
       );
     });
     return (

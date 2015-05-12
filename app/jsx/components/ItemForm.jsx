@@ -13,7 +13,8 @@ var ItemForm = React.createClass({
   propTypes: {
     onSave: ReactPropTypes.func.isRequired,
     item: ReactPropTypes.object,
-    isEditing: ReactPropTypes.bool
+    isEditing: ReactPropTypes.bool,
+    onPurchasePriceChange: ReactPropTypes.func.isRequired
   },
 
   getInitialState: function() {
@@ -45,7 +46,7 @@ var ItemForm = React.createClass({
     return <input className="button postfix" type="submit" value="Save" onClick={this.save} />;
   },
 
-  _purchasePrice: function() {
+  _calculatePurchasePrice: function() {
     var item = this.state.item;
     var converted = item.quantity.value * QuantityUtils.convert(
       item.quantity.measure,
@@ -54,16 +55,16 @@ var ItemForm = React.createClass({
 
     var val = (item.unitprice.price / item.unitprice.quantity.value) * converted;
     if (isNaN(val)) {
-      return '--';
+      return 0;
     }
-    return val.toFixed(2);
+
+    return parseFloat(val.toFixed(2));
   },
 
   render: function() {
     var item = this.state.item;
     var name = this._name();
     var actionButtons = this._actionButtons();
-    var purchasePrice = this._purchasePrice();
 
     return (
       <div className="row">
@@ -82,7 +83,7 @@ var ItemForm = React.createClass({
             <div className="large-3 columns">
               <span className="right">{String.fromCharCode(163)}</span>
             </div>
-            <div className="small-9 columns">{purchasePrice}</div>
+            <div className="small-9 columns">{item.purchasePrice}</div>
           </div>
         </div>
       </div>
@@ -116,6 +117,12 @@ var ItemForm = React.createClass({
   onChange: function(field, val) {
     var nextState = this.state;
     nextState.item[field] = val;
+
+    var purchasePrice = this._calculatePurchasePrice();
+    if (purchasePrice != nextState.item.purchasePrice) {
+      nextState.item.purchasePrice = purchasePrice;
+      this.props.onPurchasePriceChange(nextState.item);
+    }
     this.setState(nextState);
   },
 
