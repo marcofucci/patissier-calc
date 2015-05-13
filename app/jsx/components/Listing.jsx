@@ -5,17 +5,29 @@ var ItemList = require('./ItemList.jsx');
 var ItemForm = require('./ItemForm.jsx');
 var ListingActions = require('../actions/ListingActions.jsx');
 var ListingStore = require('../stores/ListingStore.jsx');
+var ContentEditable = require('./ui/ContentEditable.jsx');
 
 
-function getListingItems() {
-  return ListingStore.getState().items;
+var CSS = {
+  container: {
+    marginTop: '3rem'
+  },
+
+  headerSelect: {
+    width: '3rem',
+    margin: '0 1rem'
+  }
+}
+
+function getListing() {
+  return ListingStore.getState().listing;
 }
 
 function getTotPurchasePrice() {
-  var items = getListingItems();
+  var listing = getListing();
   var totPurchasePrice = 0;
 
-  items.map(function(item) {
+  listing.items.map(function(item) {
     totPurchasePrice += item.purchasePrice;
   });
 
@@ -26,7 +38,7 @@ function getTotPurchasePrice() {
 var Listing = React.createClass({
 	getInitialState: function() {
     return {
-      data: getListingItems(),
+      listing: getListing(),
       totPurchasePrice: getTotPurchasePrice()
     };
   },
@@ -40,13 +52,27 @@ var Listing = React.createClass({
   },
 
   render: function() {
+    var portionOptions = [];
+    for (var i=1; i<=10; i++) {
+      portionOptions.push(
+        <option key={i} value={i}>{i}</option>
+      )
+    }
+
     return (
       <div>
         <header id="topbar" className="row main">
-          <div className="container">
-            <h1>Bla</h1>
+          <div style={CSS.container}>
+            <ContentEditable html={this.state.listing.name} onChange={this.onFieldChange.bind(this, 'name', null)} />
+            <span>for</span>
+            <select style={CSS.headerSelect} value={this.state.listing.portions} onChange={this.onFieldChange.bind(this, 'portions', parseInt)}>
+              {portionOptions}
+            </select>
+            <span>portions</span>
           </div>
         </header>
+
+        <hr />
 
         <div className="row main">
 
@@ -59,7 +85,7 @@ var Listing = React.createClass({
             </div>
           </div>
 
-          <ItemList onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} items={this.state.data} />
+          <ItemList onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} items={this.state.listing.items} />
 
           <ItemForm onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} isEditing={true} />
 
@@ -82,15 +108,27 @@ var Listing = React.createClass({
     );
   },
 
+  onFieldChange: function(field, parser, event) {
+    var val = event.target.value;
+    if (parser) {
+      val = parser(val);
+    }
+
+    ListingActions.updateListingField({
+      field: field,
+      value: val
+    });
+  },
+
   onItemSave: function(item) {
-    ListingActions.createOrUpdate(item);
+    ListingActions.createOrUpdateItem(item);
   },
 
   onPurchasePriceChange: function(item) {},
 
   onDataChange: function() {
     this.setState({
-      data: getListingItems(),
+      listing: getListing(),
       totPurchasePrice: getTotPurchasePrice()
     });
   }

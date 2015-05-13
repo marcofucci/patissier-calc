@@ -2,49 +2,54 @@ var alt = require('../alt')
 
 var ListingActions = require('../actions/ListingActions.jsx')
 
-var data = [
-  {
-    id: 1,
-    name: "Milk",
-    quantity: {
-      value: 100,
-      measure: 'gr'
+var listing = {
+  name: 'Lorem ipsum',
+  portions: 4,
+  items: [
+    {
+      id: 1,
+      name: "Milk",
+      quantity: {
+        value: 100,
+        measure: 'gr'
+      },
+      unitprice: {
+        quantity: {
+          value: 1,
+          measure: 'kg'
+        },
+        price: '2.34'
+      },
+      purchasePrice: 0.23
     },
-    unitprice: {
+    {
+      id: 2,
+      name: "Water",
       quantity: {
         value: 1,
-        measure: 'kg'
-      },
-      price: '2.34'
-    },
-    purchasePrice: 0.23
-  },
-  {
-    id: 2,
-    name: "Water",
-    quantity: {
-      value: 1,
-      measure: 'l'
-    },
-    unitprice: {
-      quantity: {
-        value: 2,
         measure: 'l'
       },
-      price: '1.30'
-    },
-    purchasePrice: 0.65
-  }
-];
+      unitprice: {
+        quantity: {
+          value: 2,
+          measure: 'l'
+        },
+        price: '1.30'
+      },
+      purchasePrice: 0.65
+    }
+  ]
+};
 
 var listingStore = alt.createStore({
   displayName: 'ListingStore',
   state: {
-  	items: data
+  	listing: listing
   },
 
   bindListeners: {
-    onCreateOrUpdate: ListingActions.CREATE_OR_UPDATE
+    onCreateOrUpdateItem: ListingActions.CREATE_OR_UPDATE_ITEM,
+    onUpdateListingField: ListingActions.UPDATE_LISTING_FIELD
   },
 
   publicMethods: {
@@ -67,14 +72,14 @@ var listingStore = alt.createStore({
     }
   },
 
-  onCreateOrUpdate: function(item) {
+  onCreateOrUpdateItem: function(item) {
   	var newState = this.state;
 
   	if (item.id == -1) {
-			item['id'] = newState.items.length+1;
-	    newState.items.push(item);
+			item['id'] = newState.listing.items.length+1;
+	    newState.listing.items.push(item);
 	  } else {
-	  	newState.items = newState.items.map(
+	  	newState.listing.items = newState.listing.items.map(
 	  		function(i) {
 	  			return i.id == item.id ? item : i;
 	  		}
@@ -82,6 +87,13 @@ var listingStore = alt.createStore({
   	}
 
   	this.setState(newState);
+  },
+
+  onUpdateListingField: function(data) {
+    var newState = this.state;
+
+    newState.listing[data.field] = data.value;
+    this.setState(newState);
   }
 });
 
