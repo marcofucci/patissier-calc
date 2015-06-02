@@ -6,6 +6,7 @@ var vendorFiles = mainBowerFiles();
 var paths = {
   dest: {
     dist: '_public/',
+    dist_files: '_public/**/*',
     app: 'app.js',
     style: 'app.css',
     images: '_public/images/'
@@ -26,6 +27,10 @@ var paths = {
   ],
   images: [
       'app/images/**/*'
+  ],
+  electron: [
+    'index.js',
+    'package.json'
   ],
   vendor_scripts: vendorFiles
 };

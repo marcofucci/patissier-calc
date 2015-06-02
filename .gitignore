@@ -7,5 +7,6 @@ app/bower_components
 
 build
 _public
+cache
 
 .DS_Store
