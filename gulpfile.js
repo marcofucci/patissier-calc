@@ -13,6 +13,7 @@ var browserify = require('browserify');
 var reactify = require('reactify');
 var watchify = require('watchify');
 var source = require("vinyl-source-stream");
+var babelify = require('babelify');
 
 
 var cleanTask = function (options) {
@@ -37,7 +38,9 @@ var scriptsTask = function (options) {
   var rebundle = function () {
     var start = Date.now();
     console.log('Building app.js');
-    appBundler.bundle()
+    appBundler
+      .transform(babelify)
+      .bundle()
       .on('error', gutil.log)
       .pipe(source(paths.dest.app))
       // .pipe(gulpif(!options.development, streamify(uglify())))
