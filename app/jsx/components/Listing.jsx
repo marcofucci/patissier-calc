@@ -148,6 +148,15 @@ var Listing = React.createClass({
     });
   },
 
+  onCurrentPurchasePricesMustChange: function() {
+    var purchasePrice = this._calculatePurchasePrice()
+
+    this.setState({
+      currentPurchasePriceX: purchasePrice,
+      currentPurchasePrice1: purchasePrice / this.state.listing.portions
+    });
+  },
+
   onFieldChange: function(field, parser, event) {
     var val = event.target.value;
     if (parser) {
@@ -159,6 +168,7 @@ var Listing = React.createClass({
       value: val
     });
 
+    this.onCurrentPurchasePricesMustChange();
     this.saveListingPurchasePrices();
   },
 
@@ -175,15 +185,16 @@ var Listing = React.createClass({
   },
 
   onPurchasePriceChange: function(item) {
+    // update cache
     var cache = this.state.purchasePriceItemsCache;
-    var purchasePrice = this._calculatePurchasePrice()
-
     cache[item.id] = item.purchasePrice;
+
     this.setState({
-      purchasePriceItemsCache: cache,
-      currentPurchasePriceX: purchasePrice,
-      currentPurchasePrice1: purchasePrice / this.state.listing.portions
+      purchasePriceItemsCache: cache
     });
+
+    // update purchase prices
+    this.onCurrentPurchasePricesMustChange();
   },
 
   onDataChange: function() {
