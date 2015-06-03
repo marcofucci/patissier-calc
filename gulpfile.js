@@ -52,6 +52,19 @@ gulp.task('scripts', function() {
   return rebundle();
 });
 
+// gulp.task('lib-scripts', function() {
+//   var run = function() {
+//     console.log('Building lib.js');
+//     gulp.src(paths.vendor_scripts)
+//       .pipe(gulpFilter(['**/jquery.js', '**/foundation.js']))
+//       // .pipe(uglify())
+//       .pipe(concat(paths.dest.lib))
+//       .pipe(gulp.dest(paths.dest.dist));
+//   }
+//   gulp.watch(paths.vendor_scripts, run);
+//   return run();
+// });
+
 
 // css
 gulp.task('css', function() {

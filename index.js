@@ -17,7 +17,9 @@ app.on('ready', function() {
 		height: 360,
 		'min-width': 480,
 		'min-height': 280,
-		frame: true
+		frame: true,
+		y: 450,
+		x: 300
 	});
 	mainWindow.loadUrl('file://' + __dirname + '/index.html');
 	mainWindow.on('closed', function() {
