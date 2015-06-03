@@ -16,6 +16,7 @@ var source = require("vinyl-source-stream");
 var babelify = require('babelify');
 var atom = require( 'gulp-atom' );
 var runSequence = require('run-sequence');
+var livereload = require('gulp-livereload');
 
 
 // clean
@@ -111,9 +112,11 @@ gulp.task('electron', function() {
 
 // exec
 gulp.task('build-exec', function() {
+  livereload.listen();
+
   var run = function() {
     console.log('exec');
-    return atom({
+    atom({
       srcPath: paths.dest.dist,
       releasePath: './build',
       cachePath: './cache',
@@ -121,8 +124,13 @@ gulp.task('build-exec', function() {
       rebuild: false,
       platforms: ['darwin-x64']
     });
+
   };
-  gulp.watch(paths.dest.dist_files, run);
+  // gulp.watch(paths.dest.dist_files, run);
+  gulp.watch(paths.dest.dist_files, function(vinyl) {
+    run();
+    gulp.src(vinyl.path).pipe(livereload());
+  });
   return run();
 });
 
