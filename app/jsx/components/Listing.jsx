@@ -63,6 +63,24 @@ var Listing = React.createClass({
     ListingStore.unlisten(this.onDataChange);
   },
 
+  renderPurchasePriceRow: function(portions, stateVar) {
+    return (
+      <div className="row">
+        <div className="large-11 columns tar">
+          pp for {portions}:
+        </div>
+        <div className="large-1 columns">
+          <div className="row collapse">
+            <div className="large-3 columns">
+              <span className="right">{String.fromCharCode(163)}</span>
+            </div>
+            <div className="small-9 columns">{this.state[stateVar].toFixed(2)}</div>
+          </div>
+        </div>
+      </div>
+    )
+  },
+
   render: function() {
     var portionOptions = [];
     for (var i=1; i<=10; i++) {
@@ -70,6 +88,11 @@ var Listing = React.createClass({
         <option key={i} value={i}>{i}</option>
       )
     }
+
+    // purchase prices
+    var portions = this.state.listing.portions;
+    var purchasePriceX = this.renderPurchasePriceRow(portions, 'currentPurchasePriceX');
+    var purchasePrice1 = portions > 1 ? this.renderPurchasePriceRow(1, 'currentPurchasePrice1') : '';
 
     return (
       <div>
@@ -101,33 +124,8 @@ var Listing = React.createClass({
 
           <ItemForm onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} isEditing={true} />
 
-          <div className="row">
-            <div className="large-11 columns tar">
-              pp for {this.state.listing.portions} ppl:
-            </div>
-            <div className="large-1 columns">
-              <div className="row collapse">
-                <div className="large-3 columns">
-                  <span className="right">{String.fromCharCode(163)}</span>
-                </div>
-                <div className="small-9 columns">{this.state.currentPurchasePriceX.toFixed(2)}</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="large-11 columns tar">
-              pp for 1:
-            </div>
-            <div className="large-1 columns">
-              <div className="row collapse">
-                <div className="large-3 columns">
-                  <span className="right">{String.fromCharCode(163)}</span>
-                </div>
-                <div className="small-9 columns">{this.state.currentPurchasePrice1.toFixed(2)}</div>
-              </div>
-            </div>
-          </div>
+          {purchasePriceX}
+          {purchasePrice1}
 
         </div>
       </div>
