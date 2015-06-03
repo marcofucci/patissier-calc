@@ -23,23 +23,35 @@ function getListing() {
   return ListingStore.getState().listing;
 }
 
-function getTotPurchasePrice() {
-  var listing = getListing();
-  var totPurchasePrice = 0;
-
-  listing.items.map(function(item) {
-    totPurchasePrice += item.purchasePrice;
-  });
-
-  return totPurchasePrice;
-}
-
-
 var Listing = React.createClass({
+  _calculatePurchasePrice: function(useCache=true) {
+    var listing = this.state.listing;
+    var cache = this.state.purchasePriceItemsCache;
+    var currentPurchasePrice = 0;
+
+    listing.items.map(function(item) {
+      if (useCache && item.id in cache) {
+        currentPurchasePrice += cache[item.id];
+      } else {
+        currentPurchasePrice += item.purchasePrice;
+      }
+    });
+
+    // new one ?
+    if (useCache && -1 in cache) {
+      currentPurchasePrice += cache[-1];
+    }
+
+    return currentPurchasePrice;
+  },
+
 	getInitialState: function() {
+    var listing = getListing();
     return {
-      listing: getListing(),
-      totPurchasePrice: getTotPurchasePrice()
+      listing: listing,
+      purchasePriceItemsCache: {},
+      currentPurchasePriceX: listing.purchasePriceX,
+      currentPurchasePrice1: listing.purchasePrice1
     };
   },
 
@@ -68,7 +80,7 @@ var Listing = React.createClass({
             <select style={CSS.headerSelect} value={this.state.listing.portions} onChange={this.onFieldChange.bind(this, 'portions', parseInt)}>
               {portionOptions}
             </select>
-            <span>portions</span>
+            <span>ppl</span>
           </div>
         </header>
 
@@ -78,10 +90,10 @@ var Listing = React.createClass({
 
           <div className="row">
             <div className="large-6 columns">
-              <h3>Ingredients</h3>
+              <h3>Title1</h3>
             </div>
             <div className="large-6 columns">
-              <h3>Prices</h3>
+              <h3>Title2</h3>
             </div>
           </div>
 
@@ -91,14 +103,28 @@ var Listing = React.createClass({
 
           <div className="row">
             <div className="large-11 columns tar">
-              Purchase price:
+              pp for {this.state.listing.portions} ppl:
             </div>
             <div className="large-1 columns">
               <div className="row collapse">
                 <div className="large-3 columns">
                   <span className="right">{String.fromCharCode(163)}</span>
                 </div>
-                <div className="small-9 columns">{this.state.totPurchasePrice.toFixed(2)}</div>
+                <div className="small-9 columns">{this.state.currentPurchasePriceX.toFixed(2)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="large-11 columns tar">
+              pp for 1:
+            </div>
+            <div className="large-1 columns">
+              <div className="row collapse">
+                <div className="large-3 columns">
+                  <span className="right">{String.fromCharCode(163)}</span>
+                </div>
+                <div className="small-9 columns">{this.state.currentPurchasePrice1.toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -106,6 +132,20 @@ var Listing = React.createClass({
         </div>
       </div>
     );
+  },
+
+  saveListingPurchasePrices: function() {
+    var purchasePriceX = this._calculatePurchasePrice(false);
+
+    ListingActions.updateListingField({
+      field: 'purchasePriceX',
+      value: purchasePriceX
+    });
+
+    ListingActions.updateListingField({
+      field: 'purchasePrice1',
+      value: purchasePriceX / this.state.listing.portions
+    });
   },
 
   onFieldChange: function(field, parser, event) {
@@ -118,18 +158,37 @@ var Listing = React.createClass({
       field: field,
       value: val
     });
+
+    this.saveListingPurchasePrices();
   },
 
   onItemSave: function(item) {
+    var cache = this.state.purchasePriceItemsCache;
+    if (item.id in cache) {
+      delete cache[item.id];
+      this.setState({
+        purchasePriceItemsCache: cache
+      });
+    }
     ListingActions.createOrUpdateItem(item);
+    this.saveListingPurchasePrices();
   },
 
-  onPurchasePriceChange: function(item) {},
+  onPurchasePriceChange: function(item) {
+    var cache = this.state.purchasePriceItemsCache;
+    var purchasePrice = this._calculatePurchasePrice()
+
+    cache[item.id] = item.purchasePrice;
+    this.setState({
+      purchasePriceItemsCache: cache,
+      currentPurchasePriceX: purchasePrice,
+      currentPurchasePrice1: purchasePrice / this.state.listing.portions
+    });
+  },
 
   onDataChange: function() {
     this.setState({
-      listing: getListing(),
-      totPurchasePrice: getTotPurchasePrice()
+      listing: getListing()
     });
   }
 });

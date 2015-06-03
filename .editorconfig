@@ -4,3 +4,7 @@ root = true
 [*.jsx]
 trim_trailing_whitespace = true
 indent_size = 2
+
+[*.js]
+trim_trailing_whitespace = true
+indent_size = 2

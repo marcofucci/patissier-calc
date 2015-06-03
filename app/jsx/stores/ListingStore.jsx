@@ -4,11 +4,13 @@ var ListingActions = require('../actions/ListingActions.jsx')
 
 var listing = {
   name: 'Lorem ipsum',
+  purchasePriceX: 0.88,
+  purchasePrice1: 0.22,
   portions: 4,
   items: [
     {
       id: 1,
-      name: "Milk",
+      name: "one",
       quantity: {
         value: 100,
         measure: 'gr'
@@ -24,7 +26,7 @@ var listing = {
     },
     {
       id: 2,
-      name: "Water",
+      name: "two",
       quantity: {
         value: 1,
         measure: 'l'
