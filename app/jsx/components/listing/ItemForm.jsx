@@ -1,52 +1,50 @@
-/* @jsx React.DOM */
-
-var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var ListingStore = require('../../stores/ListingStore.jsx');
-var Quantity = require('./Quantity.jsx');
-var UnitPrice = require('./UnitPrice.jsx');
-var QuantityUtils = require('./utils/QuantityUtils.jsx');
+import React from 'react';
+import ListingStore from '../../stores/ListingStore.jsx';
+import Quantity from './Quantity.jsx';
+import UnitPrice from './UnitPrice.jsx';
+import QuantityUtils from './utils/QuantityUtils.jsx';
 
 
-var ItemForm = React.createClass({
+export default class ItemForm extends React.Component {
+  static propTypes: {
+    onSave: React.PropTypes.func.isRequired,
+    item: React.PropTypes.object,
+    isEditing: React.PropTypes.bool,
+    onPurchasePriceChange: React.PropTypes.func.isRequired
+  }
 
-  propTypes: {
-    onSave: ReactPropTypes.func.isRequired,
-    item: ReactPropTypes.object,
-    isEditing: ReactPropTypes.bool,
-    onPurchasePriceChange: ReactPropTypes.func.isRequired
-  },
+  constructor(props) {
+    super(props);
 
-  getInitialState: function() {
     var item = this.props.item || this.getEmptyItem();
-    return {
+    this.state = {
       item: item,
       isNew: item.id <= 0 ? true : false,
       isEditing: this.props.isEditing
     }
-  },
+  }
 
-  getEmptyItem: function() {
+  getEmptyItem = () => {
     return ListingStore.getEmptyItem();
-  },
+  }
 
-  _name: function() {
+  _name = () => {
     if (!this.state.isEditing) {
       return this.state.item.name;
     }
 
     return <input type="text" placeholder="Name" value={this.state.item.name} onChange={this.onFieldChange.bind(this, 'name')} />;
-  },
+  }
 
-  _actionButtons: function() {
+  _actionButtons = () => {
     if (!this.state.isEditing) {
       return <input className="button warning postfix" type="submit" value="Edit" onClick={this.enterEditMode} />;
     }
 
     return <input className="button postfix" type="submit" value="Save" onClick={this.save} />;
-  },
+  }
 
-  _calculatePurchasePrice: function() {
+  _calculatePurchasePrice = () => {
     var item = this.state.item;
     var converted = item.quantity.value * QuantityUtils.convert(
       item.quantity.measure,
@@ -59,9 +57,9 @@ var ItemForm = React.createClass({
     }
 
     return parseFloat(val.toFixed(2));
-  },
+  }
 
-  render: function() {
+  render = () => {
     var item = this.state.item;
     var name = this._name();
     var actionButtons = this._actionButtons();
@@ -88,21 +86,21 @@ var ItemForm = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  enterEditMode: function() {
+  enterEditMode = () => {
     this.setState({
       isEditing: true
     });
-  },
+  }
 
-  exitEditMode: function() {
+  exitEditMode = () => {
     this.setState({
       isEditing: false
     });
-  },
+  }
 
-  save: function() {
+  save = () => {
     var itemToSave = this.state.item;
     if (this.state.isNew) {
       this.setState({
@@ -112,9 +110,9 @@ var ItemForm = React.createClass({
       this.exitEditMode();
     }
     this.props.onSave(itemToSave);
-  },
+  }
 
-  onChange: function(field, val) {
+  onChange = (field, val) => {
     var nextState = this.state;
     nextState.item[field] = val;
 
@@ -124,19 +122,17 @@ var ItemForm = React.createClass({
       this.props.onPurchasePriceChange(nextState.item);
     }
     this.setState(nextState);
-  },
+  }
 
-  onFieldChange: function(field, event) {
+  onFieldChange = (field, event) => {
     this.onChange(field, event.target.value);
-  },
+  }
 
-  onUnitpriceChange: function(unitprice) {
+  onUnitpriceChange = (unitprice) => {
     this.onChange('unitprice', unitprice);
-  },
+  }
 
-  onQuantityChange: function(quantity) {
+  onQuantityChange = (quantity) => {
     this.onChange('quantity', quantity);
   }
-});
-
-module.exports = ItemForm;
+};

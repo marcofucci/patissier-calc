@@ -50,7 +50,7 @@ addConversion('unit', [
 
 
 var QuantityUtils = {
-	convert: function(mFrom, mTo) {
+	convert(mFrom, mTo) {
 		var mFromData = MAPPING[mFrom],
 				mToData = MAPPING[mTo];
 
@@ -74,9 +74,9 @@ var QuantityUtils = {
 		return mFromData[mTo];
 	},
 
-	getAllTypes: function() {
+	getAllTypes() {
 		return MAPPING.all;
 	}
 }
 
-module.exports = QuantityUtils;
+export default QuantityUtils;

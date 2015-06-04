@@ -1,14 +1,12 @@
-/* @jsx React.DOM */
-
-var React = require('react');
+import React from 'react';
 
 var spanStyle = {
   fontSize: '2.5rem',
   marginRight: '1rem'
 };
 
-var ContentEditable = React.createClass({
-  render: function(){
+export default class ContentEditable extends React.Component {
+  render() {
     return (
       <span
         style={spanStyle}
@@ -17,12 +15,14 @@ var ContentEditable = React.createClass({
         contentEditable
         dangerouslySetInnerHTML={{__html: this.props.html}}></span>
     );
-  },
-  shouldComponentUpdate: function(nextProps){
-    return nextProps.html !== this.getDOMNode().innerHTML;
-  },
-  emitChange: function(){
-    var html = this.getDOMNode().innerHTML;
+  }
+
+  shouldComponentUpdate = (nextProps) => {
+    return nextProps.html !== React.findDOMNode(this).innerHTML;
+  }
+
+  emitChange = () => {
+    var html = React.findDOMNode(this).innerHTML;
     if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange({
         target: {
@@ -32,6 +32,4 @@ var ContentEditable = React.createClass({
     }
     this.lastHtml = html;
   }
-});
-
-module.exports = ContentEditable;
+};

@@ -1,10 +1,11 @@
 /* @jsx React.DOM */
 
-var React = require('react');
-var Router = require('react-router');
+import React from 'react';
+import Router from 'react-router';
 
-var Listing = require('./components/listing/Listing.jsx');
-var GeneralCosts = require('./components/settings/GeneralCosts.jsx');
+import Listing from './components/listing/Listing.jsx';
+import GeneralCosts from './components/settings/GeneralCosts.jsx';
+
 var { Route, RouteHandler, Link, Redirect } = Router;
 
 
@@ -14,7 +15,7 @@ var App = React.createClass({
     router: React.PropTypes.func
   },
 
-  render: function() {
+  render() {
     var name = this.context.router.getCurrentPath();
     return (
     	<section id="content" class="container">

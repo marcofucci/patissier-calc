@@ -1,5 +1,5 @@
-var alt = require('../alt');
+import alt from '../alt';
 
 var ListingActions = alt.generateActions('updateListingField', 'createOrUpdateItem', 'destroyItem');
 
-module.exports = ListingActions;
+export default ListingActions;

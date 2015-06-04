@@ -1,18 +1,15 @@
-/* @jsx React.DOM */
-
-var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var ItemForm = require('./ItemForm.jsx');
+import React from 'react';
+import ItemForm from './ItemForm.jsx';
 
 
-var ItemList = React.createClass({
-  propTypes: {
-    onSave: ReactPropTypes.func.isRequired,
-    items: ReactPropTypes.array.isRequired,
-    onPurchasePriceChange: ReactPropTypes.func.isRequired
-  },
+export default class ItemList extends React.Component {
+  static propTypes: {
+    onSave: React.PropTypes.func.isRequired,
+    items: React.PropTypes.array.isRequired,
+    onPurchasePriceChange: React.PropTypes.func.isRequired
+  }
 
-  render: function() {
+  render() {
     var self = this;
     var items = this.props.items;
     var onSaveFunc = this._onSave;
@@ -27,11 +24,9 @@ var ItemList = React.createClass({
         {itemNodes}
       </div>
     );
-  },
+  }
 
-  _onSave: function(item) {
+  _onSave = (item) => {
     this.props.onSave(item);
   }
-});
-
-module.exports = ItemList;
+};

@@ -1,25 +1,24 @@
-var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var QuantityUtils = require('./utils/QuantityUtils.jsx');
+import React from 'react';
+import QuantityUtils from './utils/QuantityUtils.jsx';
 
 
-var Quantity = React.createClass({
-  propTypes: {
-    onChange: ReactPropTypes.func.isRequired,
-    quantity: ReactPropTypes.object,
-    className: ReactPropTypes.string,
-    isEditing: ReactPropTypes.bool
-  },
+export default class Quantity extends React.Component {
+  static propTypes: {
+    onChange: React.PropTypes.func.isRequired,
+    quantity: React.PropTypes.object,
+    className: React.PropTypes.string,
+    isEditing: React.PropTypes.bool
+  }
 
-  _quantityValueEl: function() {
+  _quantityValueEl = () => {
   	if (!this.props.isEditing) {
   		return this.props.quantity.value;
   	}
 
   	return <input type="text" placeholder="Quantity" type="number" value={this.props.quantity.value} onChange={this.onChange.bind(this, 'value', parseInt)} />
-  },
+  }
 
-  _quantityMeasureEl: function() {
+  _quantityMeasureEl = () => {
   	if (!this.props.isEditing) {
   		return this.props.quantity.measure;
   	}
@@ -36,9 +35,9 @@ var Quantity = React.createClass({
         {measureOptions}
       </select>
     )
-  },
+  }
 
-	render: function() {
+	render() {
 		var valueEl = this._quantityValueEl();
 		var measureEl = this._quantityMeasureEl();
 
@@ -48,9 +47,9 @@ var Quantity = React.createClass({
 		    <div className="large-6 columns padr0">{measureEl}</div>
 		  </div>
 	   )
-	},
+	}
 
-	onChange: function(field, parser, event) {
+	onChange = (field, parser, event) => {
 		var val = event.target.value;
 		if (parser) {
 			val = parser(val);
@@ -59,6 +58,4 @@ var Quantity = React.createClass({
     quantity[field] = val;
 		this.props.onChange(quantity);
 	}
-});
-
-module.exports = Quantity;
+};

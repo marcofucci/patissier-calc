@@ -1,4 +1,4 @@
-var alt = require('../alt')
+import alt from '../alt';
 
 var ListingActions = require('../actions/ListingActions.jsx')
 
@@ -55,7 +55,7 @@ var listingStore = alt.createStore({
   },
 
   publicMethods: {
-    getEmptyItem: function() {
+    getEmptyItem() {
       return {
         id: -1,
         name: null,
@@ -74,7 +74,7 @@ var listingStore = alt.createStore({
     }
   },
 
-  onCreateOrUpdateItem: function(item) {
+  onCreateOrUpdateItem(item) {
   	var newState = this.state;
 
   	if (item.id == -1) {
@@ -91,7 +91,7 @@ var listingStore = alt.createStore({
   	this.setState(newState);
   },
 
-  onUpdateListingField: function(data) {
+  onUpdateListingField(data) {
     var newState = this.state;
 
     newState.listing[data.field] = data.value;
@@ -99,4 +99,4 @@ var listingStore = alt.createStore({
   }
 });
 
-module.exports = listingStore;
+export default listingStore;

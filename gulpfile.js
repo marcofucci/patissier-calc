@@ -12,7 +12,6 @@ var flatten = require('gulp-flatten');
 var print = require('gulp-print');
 var importCss = require('gulp-import-css');
 var browserify = require('browserify');
-var reactify = require('reactify');
 var watchify = require('watchify');
 var source = require("vinyl-source-stream");
 var babelify = require('babelify');
@@ -33,7 +32,7 @@ gulp.task('scripts', function() {
 
   var appBundler = browserify({
         entries: [paths.main_jsx], // The entry file, normally "main.js"
-        transform: [reactify], // Convert JSX style
+        transform: [],
         debug: true, // Sourcemapping
         cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
     });
@@ -42,7 +41,9 @@ gulp.task('scripts', function() {
     var start = Date.now();
     console.log('Building app.js');
     return appBundler
-      .transform(babelify)
+      .transform(babelify.configure({
+        optional: ["es7.classProperties"]
+      }))
       .bundle()
       .on('error', gutil.log)
       .pipe(source(paths.dest.app))

@@ -1,11 +1,9 @@
-/* @jsx React.DOM */
-
-var React = require('react');
-var ItemList = require('./ItemList.jsx');
-var ItemForm = require('./ItemForm.jsx');
-var ListingActions = require('../../actions/ListingActions.jsx');
-var ListingStore = require('../../stores/ListingStore.jsx');
-var ContentEditable = require('../ui/ContentEditable.jsx');
+import React from 'react';
+import ItemList from './ItemList.jsx';
+import ItemForm from './ItemForm.jsx';
+import ListingActions from '../../actions/ListingActions.jsx';
+import ListingStore from '../../stores/ListingStore.jsx';
+import ContentEditable from '../ui/ContentEditable.jsx';
 
 
 var CSS = {
@@ -23,8 +21,21 @@ function getListing() {
   return ListingStore.getState().listing;
 }
 
-var Listing = React.createClass({
-  _calculatePurchasePrice: function(useCache=true) {
+export default class Listing extends React.Component {
+  constructor(props) {
+    super(props);
+
+    var listing = getListing();
+    this.state = {
+      listing: listing,
+      purchasePriceItemsCache: {},
+      currentPurchasePriceX: listing.purchasePriceX,
+      currentPurchasePrice1: listing.purchasePrice1
+    };
+
+  }
+
+  _calculatePurchasePrice = (useCache=true) => {
     var listing = this.state.listing;
     var cache = this.state.purchasePriceItemsCache;
     var currentPurchasePrice = 0;
@@ -43,27 +54,18 @@ var Listing = React.createClass({
     }
 
     return currentPurchasePrice;
-  },
+  }
 
-	getInitialState: function() {
-    var listing = getListing();
-    return {
-      listing: listing,
-      purchasePriceItemsCache: {},
-      currentPurchasePriceX: listing.purchasePriceX,
-      currentPurchasePrice1: listing.purchasePrice1
-    };
-  },
 
-  componentDidMount: function() {
+  componentDidMount = () => {
     ListingStore.listen(this.onDataChange);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount = () => {
     ListingStore.unlisten(this.onDataChange);
-  },
+  }
 
-  renderPurchasePriceRow: function(portions, stateVar) {
+  renderPurchasePriceRow = (portions, stateVar) => {
     return (
       <div className="row">
         <div className="large-11 columns tar">
@@ -79,9 +81,9 @@ var Listing = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
-  render: function() {
+  render = () => {
     var portionOptions = [];
     for (var i=1; i<=10; i++) {
       portionOptions.push(
@@ -130,9 +132,9 @@ var Listing = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  saveListingPurchasePrices: function() {
+  saveListingPurchasePrices = () => {
     var purchasePriceX = this._calculatePurchasePrice(false);
 
     ListingActions.updateListingField({
@@ -144,18 +146,18 @@ var Listing = React.createClass({
       field: 'purchasePrice1',
       value: purchasePriceX / this.state.listing.portions
     });
-  },
+  }
 
-  onCurrentPurchasePricesMustChange: function() {
+  onCurrentPurchasePricesMustChange = () => {
     var purchasePrice = this._calculatePurchasePrice()
 
     this.setState({
       currentPurchasePriceX: purchasePrice,
       currentPurchasePrice1: purchasePrice / this.state.listing.portions
     });
-  },
+  }
 
-  onFieldChange: function(field, parser, event) {
+  onFieldChange = (field, parser, event) => {
     var val = event.target.value;
     if (parser) {
       val = parser(val);
@@ -168,9 +170,9 @@ var Listing = React.createClass({
 
     this.onCurrentPurchasePricesMustChange();
     this.saveListingPurchasePrices();
-  },
+  }
 
-  onItemSave: function(item) {
+  onItemSave = (item) => {
     var cache = this.state.purchasePriceItemsCache;
     if (item.id in cache) {
       delete cache[item.id];
@@ -180,9 +182,9 @@ var Listing = React.createClass({
     }
     ListingActions.createOrUpdateItem(item);
     this.saveListingPurchasePrices();
-  },
+  }
 
-  onPurchasePriceChange: function(item) {
+  onPurchasePriceChange = (item) => {
     // update cache
     var cache = this.state.purchasePriceItemsCache;
     cache[item.id] = item.purchasePrice;
@@ -193,13 +195,11 @@ var Listing = React.createClass({
 
     // update purchase prices
     this.onCurrentPurchasePricesMustChange();
-  },
+  }
 
-  onDataChange: function() {
+  onDataChange = () => {
     this.setState({
       listing: getListing()
     });
   }
-});
-
-module.exports = Listing;
+};
