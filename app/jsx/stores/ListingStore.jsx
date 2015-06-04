@@ -1,6 +1,6 @@
 import alt from '../alt';
+import ListingActions from '../actions/ListingActions.jsx';
 
-var ListingActions = require('../actions/ListingActions.jsx')
 
 var listing = {
   name: 'Lorem ipsum',
@@ -43,60 +43,58 @@ var listing = {
   ]
 };
 
-var listingStore = alt.createStore({
-  displayName: 'ListingStore',
-  state: {
-  	listing: listing
-  },
 
-  bindListeners: {
-    onCreateOrUpdateItem: ListingActions.CREATE_OR_UPDATE_ITEM,
-    onUpdateListingField: ListingActions.UPDATE_LISTING_FIELD
-  },
+class ListingStore {
+  constructor() {
+    this.bindListeners({
+      onCreateOrUpdateItem: ListingActions.createOrUpdateItem,
+      onUpdateListingField: ListingActions.updateListingField
+    });
 
-  publicMethods: {
-    getEmptyItem() {
-      return {
-        id: -1,
-        name: null,
+    this.exportPublicMethods({
+      getEmptyItem: this.getEmptyItem
+    });
+
+    this.listing = listing;
+  }
+
+  getEmptyItem() {
+    return {
+      id: -1,
+      name: null,
+      quantity: {
+        value: null,
+        measure: null
+      },
+      unitprice: {
         quantity: {
           value: null,
           measure: null
         },
-        unitprice: {
-          quantity: {
-            value: null,
-            measure: null
-          },
-          price: null
-        }
-      };
-    }
-  },
+        price: null
+      }
+    };
+  }
 
   onCreateOrUpdateItem(item) {
-  	var newState = this.state;
+    const listing = this.listing;
 
-  	if (item.id == -1) {
-			item['id'] = newState.listing.items.length+1;
-	    newState.listing.items.push(item);
-	  } else {
-	  	newState.listing.items = newState.listing.items.map(
-	  		function(i) {
-	  			return i.id == item.id ? item : i;
-	  		}
-	  	);
-  	}
+    if (item.id == -1) {
+      item['id'] = listing.items.length+1;
+      listing.items.push(item);
+    } else {
+      listing.items = listing.items.map(i => i.id == item.id ? item : i);
+    }
 
-  	this.setState(newState);
-  },
+    this.setState({ listing });
+  }
 
   onUpdateListingField(data) {
-    var newState = this.state;
+    const listing = this.listing;
 
-    newState.listing[data.field] = data.value;
-    this.setState(newState);
+    listing[data.field] = data.value;
+    this.setState({ listing });
   }
-});
+}
 
-export default listingStore;
+export default alt.createStore(ListingStore);

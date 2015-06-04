@@ -3,12 +3,12 @@ var MAPPING = {
 };
 
 function addConversion(_type, conversion, alias) {
-	conversion.map(function(c) {
+	conversion.map(c => {
 		var from = c[0],
 				val = c[1],
 				to = c[2];
 
-		[from, to].map(function(fromto) {
+		[from, to].map(fromto => {
 			if (typeof MAPPING[fromto] == 'undefined') {
 				MAPPING[fromto] = {
 					_type: _type
@@ -25,7 +25,7 @@ function addConversion(_type, conversion, alias) {
 		MAPPING[to][to] = 1;
 		MAPPING[to][from] = 1 / val;
 
-		[from, to].map(function(fromto) {
+		[from, to].map(fromto => {
 			if (MAPPING.all.indexOf(fromto) == -1) {
 				MAPPING.all.push(fromto);
 			}
