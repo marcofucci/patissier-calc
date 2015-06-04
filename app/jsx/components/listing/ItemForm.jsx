@@ -2,10 +2,10 @@
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var ListingStore = require('../stores/ListingStore.jsx');
+var ListingStore = require('../../stores/ListingStore.jsx');
 var Quantity = require('./Quantity.jsx');
 var UnitPrice = require('./UnitPrice.jsx');
-var QuantityUtils = require('../utils/QuantityUtils.jsx');
+var QuantityUtils = require('./utils/QuantityUtils.jsx');
 
 
 var ItemForm = React.createClass({

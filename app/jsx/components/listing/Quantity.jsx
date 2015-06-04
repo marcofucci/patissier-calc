@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var QuantityUtils = require('../utils/QuantityUtils.jsx');
+var QuantityUtils = require('./utils/QuantityUtils.jsx');
 
 
 var Quantity = React.createClass({

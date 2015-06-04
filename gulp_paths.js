@@ -26,7 +26,10 @@ var paths = {
     'app/index.html'
   ],
   images: [
-      'app/images/**/*'
+    'app/images/**/*'
+  ],
+  icons: [
+    'app/css/**/*.+(eot|svg|ttf|woff)'
   ],
   electron: [
     'index.js',

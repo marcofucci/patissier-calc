@@ -8,6 +8,8 @@ var paths = require('./gulp_paths.js');
 var concat = require('gulp-concat');
 var del = require('del');
 var sass = require('gulp-sass');
+var flatten = require('gulp-flatten');
+var print = require('gulp-print');
 var importCss = require('gulp-import-css');
 var browserify = require('browserify');
 var reactify = require('reactify');
@@ -78,9 +80,24 @@ gulp.task('css', function() {
       }))
       .on('error', gutil.log)
       .pipe(importCss())
+      .pipe(concat(paths.dest.style))
       .pipe(gulp.dest(paths.dest.dist));
   }
   gulp.watch(paths.styles, run);
+  return run();
+});
+
+
+// icons
+gulp.task('icons', function() {
+  var run = function() {
+    console.log('Building icons');
+    return gulp
+      .src(paths.icons)
+      .pipe(flatten())
+      .pipe(gulp.dest(paths.dest.dist));
+  }
+  gulp.watch(paths.icons, run);
   return run();
 });
 
@@ -150,7 +167,7 @@ gulp.task('build-exec', function() {
 
 gulp.task('build', function() {
   runSequence(
-    'clean', ['scripts', 'electron', 'css', 'html', 'images'], 'build-exec'
+    'clean', ['scripts', 'electron', 'css', 'icons', 'html', 'images'], 'build-exec'
   );
 });
 

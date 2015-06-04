@@ -2,8 +2,12 @@
 @import "../bower_components/foundation/css/foundation.css";
 
 
-.row.main {
+/*.row.main {
 	max-width: 82.5rem;
+}*/
+
+#content nav i {
+	font-size: 0.8rem;
 }
 
 .padl0 {

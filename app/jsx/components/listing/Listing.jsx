@@ -3,9 +3,9 @@
 var React = require('react');
 var ItemList = require('./ItemList.jsx');
 var ItemForm = require('./ItemForm.jsx');
-var ListingActions = require('../actions/ListingActions.jsx');
-var ListingStore = require('../stores/ListingStore.jsx');
-var ContentEditable = require('./ui/ContentEditable.jsx');
+var ListingActions = require('../../actions/ListingActions.jsx');
+var ListingStore = require('../../stores/ListingStore.jsx');
+var ContentEditable = require('../ui/ContentEditable.jsx');
 
 
 var CSS = {
@@ -29,7 +29,7 @@ var Listing = React.createClass({
     var cache = this.state.purchasePriceItemsCache;
     var currentPurchasePrice = 0;
 
-    listing.items.map(function(item) {
+    listing.items.map((item) => {
       if (useCache && item.id in cache) {
         currentPurchasePrice += cache[item.id];
       } else {
