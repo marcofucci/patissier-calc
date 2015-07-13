@@ -21,3 +21,17 @@
 .tar {
 	text-align: right;
 }
+
+#topbar {
+	margin-top: 3rem;
+}
+
+#topbar select {
+	width: 3rem;
+    margin: 0 1rem;
+}
+
+#topbar span {
+  font-size: 2.5rem;
+  margin-right: 1rem
+}

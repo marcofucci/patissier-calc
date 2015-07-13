@@ -6,17 +6,6 @@ import ListingStore from '../../stores/ListingStore.jsx';
 import ContentEditable from '../ui/ContentEditable.jsx';
 
 
-var CSS = {
-  container: {
-    marginTop: '3rem'
-  },
-
-  headerSelect: {
-    width: '3rem',
-    margin: '0 1rem'
-  }
-}
-
 function getListing() {
   return ListingStore.getState().listing;
 }
@@ -99,14 +88,12 @@ export default class Listing extends React.Component {
     return (
       <div>
         <header id="topbar" className="row main">
-          <div style={CSS.container}>
-            <ContentEditable html={this.state.listing.name} onChange={this.onFieldChange.bind(this, 'name', null)} />
-            <span>for</span>
-            <select style={CSS.headerSelect} value={this.state.listing.portions} onChange={this.onFieldChange.bind(this, 'portions', parseInt)}>
-              {portionOptions}
-            </select>
-            <span>ppl</span>
-          </div>
+          <ContentEditable html={this.state.listing.name} onChange={this.onFieldChange.bind(this, 'name', null)} />
+          <span>for</span>
+          <select value={this.state.listing.portions} onChange={this.onFieldChange.bind(this, 'portions', parseInt)}>
+            {portionOptions}
+          </select>
+          <span>ppl</span>
         </header>
 
         <hr />
