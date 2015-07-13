@@ -1,4 +1,6 @@
 import React from 'react';
+import SettingsActions from '../../actions/SettingsActions.jsx';
+import SettingsStore from '../../stores/SettingsStore.jsx';
 
 
 export default class GeneralCosts extends React.Component {

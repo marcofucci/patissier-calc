@@ -77,7 +77,7 @@ class ListingStore {
   }
 
   onCreateOrUpdateItem(item) {
-    const listing = this.listing;
+    var listing = this.listing;
 
     if (item.id == -1) {
       item['id'] = listing.items.length+1;
@@ -90,7 +90,7 @@ class ListingStore {
   }
 
   onUpdateListingField(data) {
-    const listing = this.listing;
+    var listing = this.listing;
 
     listing[data.field] = data.value;
     this.setState({ listing });
