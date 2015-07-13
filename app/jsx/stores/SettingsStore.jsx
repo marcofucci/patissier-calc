@@ -20,7 +20,6 @@ class SettingsStore {
   constructor() {
     this.bindListeners({
       onCreateOrUpdate: SettingsActions.createOrUpdate,
-      onUpdate: SettingsActions.update,
       onDestroy: SettingsActions.destroy
     });
 
