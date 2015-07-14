@@ -2,44 +2,58 @@ import alt from '../alt';
 import SettingsActions from '../actions/SettingsActions.jsx';
 
 
-var settings = [
-  {
-    id: 1,
-    name: 'settings 1',
-    cost: '1.23'
-  },
-  {
-    id: 2,
-    name: 'settings 2',
-    cost: '4.56'
-  }
-]
+var settings = {
+  costitems: [
+    {
+      id: 1,
+      name: 'settings 1',
+      cost: '1.23'
+    },
+    {
+      id: 2,
+      name: 'settings 2',
+      cost: '4.56'
+    }
+  ]
+}
 
 
 class SettingsStore {
   constructor() {
     this.bindListeners({
-      onCreateOrUpdate: SettingsActions.createOrUpdate,
-      onDestroy: SettingsActions.destroy
+      onCreateOrUpdateCostItem: SettingsActions.createOrUpdateCostItem,
+      onDestroyCostItem: SettingsActions.destroyCostItem
+    });
+
+    this.exportPublicMethods({
+      getEmptyCostItem: this.getEmptyCostItem
     });
 
     this.settings = settings;
   }
 
-  onCreateOrUpdate(item) {
+  getEmptyCostItem() {
+    return {
+      id: -1,
+      name: null,
+      cost: 0
+    };
+  }
+
+  onCreateOrUpdateCostItem(item) {
     var settings = this.settings;
 
     if (item.id == -1) {
-      item['id'] = settings.length+1;
-      settings.push(item);
+      item['id'] = settings.costitems.length+1;
+      settings.costitems.push(item);
     } else {
-      settings = settings.map(i => i.id == item.id ? item : i);
+      settings.costitems = settings.costitems.map(i => i.id == item.id ? item : i);
     }
 
     this.setState({ settings });
   }
 
-  onDestroy(item) {
+  onDestroyCostItem(item) {
     var settings = this.settings;
 
     var index = settings.indexOf(item);

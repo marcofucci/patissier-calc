@@ -110,7 +110,6 @@ export default class Listing extends React.Component {
           </div>
 
           <ItemList onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} items={this.state.listing.items} />
-
           <ItemForm onSave={this.onItemSave} onPurchasePriceChange={this.onPurchasePriceChange} isEditing={true} />
 
           {purchasePriceX}
