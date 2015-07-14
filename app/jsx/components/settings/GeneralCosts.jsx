@@ -14,6 +14,17 @@ export default class GeneralCosts extends React.Component {
         <hr />
 
         <div className="row main">
+          <div className="row">
+
+            <div className="large-8 columns">
+              11
+            </div>
+
+            <div className="large-4 columns">
+              22
+            </div>
+
+          </div>
         </div>
       </div>
     );
